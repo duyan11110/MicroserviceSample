@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0",
+  "name": "my-app",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.leptonxlite": "~2.0.0-rc.4",
+    "@devexpress/analytics-core": "^22.2.4",
+    "cldrjs": "^0.5.5",
+    "devexpress-reporting": "^22.2.4",
+    "devextreme": "^22.2.4",
+    "devextreme-aspnet-data": "^2.9.1",
+    "globalize": "^1.7.0",
+    "jquery-ui-dist": "^1.13.2"
+  }
+}

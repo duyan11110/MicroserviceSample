@@ -1,0 +1,69 @@
+﻿@page
+@using Sample.Web.Bundling.Reporting.DocumentViewer
+@using DevExpress.AspNetCore
+@using Sample.Web.Pages
+@model Sample.Web.Pages.Reporting.ViewerModel
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+
+@functions {
+    public string GetAntiXsrfRequestToken()
+    {
+        return Xsrf.GetAndStoreTokens(HttpContext).RequestToken;
+    }
+}
+
+<script type="text/javascript">
+    function SetupJwt(bearerToken, xsrf) {
+        DevExpress.Analytics.Utils.ajaxSetup.ajaxSettings = {
+            headers: {
+                //'Authorization': 'Bearer ' + bearerToken,
+                'RequestVerificationToken': xsrf
+            }
+        };
+    }
+
+    function AttachXSRFToken_OnExport(args, xsrf) {
+        args.FormData["__RequestVerificationToken"] = xsrf;
+    }
+
+    function WebDocumentViewer_BeforeRender(s, e) {
+        SetupJwt('bearer token can be passed here', "@GetAntiXsrfRequestToken()");
+        $(window).on('beforeunload', function (e) {
+            s.Close();
+        });
+    }
+    function OnViewerExport(_s, e) {
+        AttachXSRFToken_OnExport(e, "@GetAntiXsrfRequestToken()");
+    }
+    function OnServerError(s, e) {
+        //optionally    
+        //alert(e.Error.data.error);
+    }
+    function OnDocumentReady(s, e) {
+        console.log(s);
+        console.log(e);
+    }
+</script>
+
+<input type="hidden" id="RequestVerificationToken" name="RequestVerificationToken" value="@GetAntiXsrfRequestToken()">
+
+@{
+    var viewerRender = Html.DevExpress().WebDocumentViewer("DocumentViewer")
+        .ClientSideEvents(x =>
+        {
+            x.DocumentReady("OnDocumentReady");
+            x.OnServerError("OnServerError");
+            x.BeforeRender("WebDocumentViewer_BeforeRender");
+            x.OnExport("OnViewerExport");
+        })
+        .Height("800px")
+        .Bind(Model.ReportName);
+    @viewerRender.RenderHtml()
+}
+
+@section Scripts {
+    <abp-style type="typeof(DevExpressDocumentViewerStyleContributor)" />
+
+    <abp-script type="typeof(DevExpressDocumentViewerScriptContributor)" />
+    @viewerRender.RenderScripts()
+}

@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\services\saas\src\Sample.SaaSService.EntityFrameworkCore\Sample.SaaSService.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\Sample.Shared.Hosting.AspNetCore\Sample.Shared.Hosting.AspNetCore.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.2" />
+		<PackageReference Include="Volo.Abp.MongoDB" Version="7.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.EventBus.RabbitMQ" Version="7.0.1" />
+		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" Version="7.0.1" />
+		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" Version="7.0.1" />
+		<PackageReference Include="Volo.Abp.DistributedLocking" Version="7.0.1" />
+		<PackageReference Include="DistributedLock.Redis" Version="1.0.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\services\administration\src\Sample.AdministrationService.EntityFrameworkCore\Sample.AdministrationService.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>d3c545c0-45fb-40b1-92f3-3eb33e643dea</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="MyDataSourceLoadOptions.cs" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="Yarp.ReverseProxy" Version="1.1.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\shared\Sample.Shared.Hosting.Gateways\Sample.Shared.Hosting.Gateways.csproj" />
+	</ItemGroup>
+</Project>

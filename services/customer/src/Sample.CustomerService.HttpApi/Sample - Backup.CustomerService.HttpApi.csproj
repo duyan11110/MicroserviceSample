@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Sample.CustomerService</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Customers\**" />
+    <Compile Remove="Samples\**" />
+    <EmbeddedResource Remove="Customers\**" />
+    <EmbeddedResource Remove="Samples\**" />
+    <None Remove="Customers\**" />
+    <None Remove="Samples\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="7.0.1" />
+    <ProjectReference Include="..\Sample.CustomerService.Application.Contracts\Sample.CustomerService.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

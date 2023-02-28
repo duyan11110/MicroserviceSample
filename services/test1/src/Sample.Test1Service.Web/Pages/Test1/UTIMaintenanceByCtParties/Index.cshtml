@@ -1,0 +1,508 @@
+﻿@page
+@using DevExtreme.AspNet.Mvc
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.Extensions.Localization
+@using Sample.Test1Service.UTIMaintenanceByCtParties;
+@using Sample.Test1Service.Permissions
+@using Sample.Test1Service.Localization
+@using Sample.Test1Service.Common
+@using Sample.Test1Service;
+@inject IAuthorizationService AuthorizationService
+@inject IStringLocalizer<Test1ServiceResource> L
+@inject IUTIMaintenanceByCtPartyAppService U
+@model Sample.Test1Service.Web.Pages.Test1.UTIMaintenanceByCtParties.IndexModel
+@{
+    ViewBag.FluidLayout = true;
+    ViewBag.Title = "UTI Maintenance by Ct Parties | Sample";
+}
+@*@section scripts {
+    <abp-script src="/libs/babel-polyfill/polyfill.min.js" />
+    <abp-script src="/libs/exceljs/exceljs.min.js" />
+    <abp-script src="/libs/file-saver/FileSaver.min.js" />
+}*@
+@{
+    var now = DateTime.Now;
+
+    bool canEdit = false;
+    bool canCreate = false;
+    bool canDelete = false;
+    bool canArppove = false;
+    bool canCancelApproval = false;
+    try
+    {
+        if (await AuthorizationService.IsGrantedAsync(Test1ServicePermissions.UTIMaintenanceByCtParties.Create))
+        {
+            canCreate = true;
+        }
+        if (await AuthorizationService.IsGrantedAsync(Test1ServicePermissions.UTIMaintenanceByCtParties.Edit))
+        {
+            canEdit = true;
+        }
+        if (await AuthorizationService.IsGrantedAsync(Test1ServicePermissions.UTIMaintenanceByCtParties.Delete))
+        {
+            canDelete = true;
+        }
+        if (await AuthorizationService.IsGrantedAsync(Test1ServicePermissions.UTIMaintenanceByCtParties.Approve))
+        {
+            canArppove = true;
+        }
+        if (await AuthorizationService.IsGrantedAsync(Test1ServicePermissions.UTIMaintenanceByCtParties.CancelApproval))
+        {
+            canCancelApproval = true;
+        }
+    }
+    catch { }
+
+    bool isDisableArppove = !canArppove;
+    bool isDisableCancelApproval = !canCancelApproval;
+
+    var transTypeList = new[] {
+        new { id = TransType.CCS, value = TransType.CCS }
+        , new { id = TransType.IRS, value = TransType.IRS }
+    };
+
+    var utiTypeList = new[] {
+        new { id = UTIType.YES, value = "Yes" }
+        , new { id = UTIType.NO, value = "No" }
+    };
+}
+<div class="top-content">
+    <h2>UTI Maintainance by CounterParty</h2>
+</div>
+<hr />
+@(Html.DevExtreme().Form<UTIMaintenanceByCtPartyFilterDto>().ID("searchForm")
+    .Items(items =>
+    {
+        items.AddGroup().ColCount(4).Items(gItems =>
+        {
+            gItems.AddSimpleFor(c => c.InputDateFrom).ColSpan(1)
+                .Label(l => l.Text(@L["utim_form_InputDateForm"]).ShowColon(false))
+                .Editor(c => c.DateBox()
+                    .ID("dbx_from")
+                    .Type(DateBoxType.Date)
+                    .DisplayFormat("dd-MMM-yyyy")
+                    .DateSerializationFormat("yyyy-MM-dd")
+                    .Value(now.ToString("yyyy-MM-dd"))
+                    .ShowClearButton(true)
+                );
+            gItems.AddSimpleFor(c => c.InputDateTo).ColSpan(1)
+                .Label(l => l.Text(@L["utim_form_InputDateTo"]).ShowColon(false))
+                .Editor(c => c.DateBox()
+                    .ID("dbx_to")
+                    .Type(DateBoxType.Date)
+                    .DisplayFormat("dd-MMM-yyyy")
+                    .DateSerializationFormat("yyyy-MM-dd")
+                    .Value(now.ToString("yyyy-MM-dd"))
+                    .OnValueChanged("filterDatesValidation")
+                    .ShowClearButton(true)
+                );
+        });
+    })
+    .Items(items =>
+    {
+        items.AddGroup().ColCount(8).Items(gItems =>
+        {
+            gItems.AddSimpleFor(c => c.CustomerID).ColSpan(2)
+                .Label(l => l.Text(@L["utim_form_CustomerAbbr"]).ShowColon(false))
+                .Editor(e => e.SelectBox()
+                    .DataSource(d => d.RemoteController()
+                        .LoadUrl("/api/customer-service/customer/basic-list")
+                        .Key("customerID")
+                    )
+                    .DataSourceOptions(c => c.Paginate(true).PageSize(10))                    
+                    .ID("sb_customer")
+                    .SearchEnabled(true)
+                    .OnValueChanged("onChangedCustomerAbbr")
+                    .ElementAttr("customerName", "customerName")
+                    .DisplayExpr("customerAbbr")
+                    .ValueExpr("customerID")
+                    .ShowClearButton(true)
+                );
+            gItems.AddSimple().ColSpan(3)
+                .Label(l => l.Text(@L["utim_form_CustomerName"]).ShowColon(false))
+                .Editor(e => e.TextBox()
+                    .ID("txt_CustomerName")
+                    .ReadOnly(true)
+                );
+            gItems.AddSimpleFor(c => c.TransType).ColSpan(1)
+                .Label(l => l.Text(@L["utim_form_TransType"]).ShowColon(false))
+                .Editor(e => e.SelectBox()
+                    .DataSource(transTypeList)
+                    .DisplayExpr("value")
+                    .ValueExpr("id")
+                    .ShowClearButton(true)
+                    .Width(150)
+                    .Value(null)
+                );
+            gItems.AddSimpleFor(c => c.Type).ColSpan(1)
+                .Label(l => l.Text(@L["utim_form_Type"]).ShowColon(false))
+                .Editor(e => e.SelectBox()
+                    .DataSource(utiTypeList)
+                    .DisplayExpr("value")
+                    .ValueExpr("id")
+                    .ShowClearButton(true)
+                    .Width(150)
+                    .Value(null)
+                );
+        });
+    })
+    .Items(items =>
+    {
+        items.AddGroup().ColCount(8).Items(gItems =>
+        {
+            gItems.AddButton().ColSpan(1)
+                .ButtonOptions(c => c.Text("Search")
+                    .OnInitialized("setButtonDefaultCss")
+                    .Icon("search")
+                    .Width(150)
+                    .OnClick("onSearch")
+                    .UseSubmitBehavior(true)
+                )
+                .HorizontalAlignment(HorizontalAlignment.Center)
+                ;
+            gItems.AddButton().ColSpan(1)
+                .ButtonOptions(c => c.Text("Clear")
+                    .OnInitialized("setButtonDefaultCss")
+                    .Icon("clearformat")
+                    .Width(150)
+                    .OnClick("onClear")
+                )
+                .HorizontalAlignment(HorizontalAlignment.Center)
+                ;
+        });
+    })
+ )
+<br />
+@(Html.DevExtreme().DataGrid<UTIMaintenanceByCtPartyDto>()
+    .ID("grdUTIMaintenanceByCtParty")
+    .DataSource(d => d.RemoteController()
+        .LoadUrl("/api/test1-service/u-tIMaintenance-by-ct-party")
+        .LoadParams(new { value = new JS("getSearchFormValue") })
+        @*.InsertAction("Create")
+        .UpdateAction("Update")
+        .DeleteAction("Delete")*@
+        .Key("id")
+    )
+    .Selection(s => s
+        .Mode(SelectionMode.Multiple)
+        .ShowCheckBoxesMode(GridSelectionShowCheckBoxesMode.Always)
+    )
+    .Export(e => e.Enabled(true).AllowExportSelectedData(true))
+    .OnExporting("onExporting")
+    .ShowBorders(true)
+    .ShowRowLines(true)
+    .RenderAsync(true)
+    .RemoteOperations(true)
+    .RepaintChangesOnly(true)
+    .ColumnFixing(c => c.Enabled(true))
+    .ColumnAutoWidth(true)
+    .Height(new JS("window.innerHeight - 380"))
+    .Paging(p => p.PageSize(100))
+    .Editing(e => e
+        .Mode(GridEditMode.Row)
+        .RefreshMode(GridEditRefreshMode.Reshape)
+        .AllowAdding(true)
+        .UseIcons(true)
+    )
+    .RowAlternationEnabled(true)
+    .Pager(c => c.Visible(true).ShowInfo(true))
+    .HoverStateEnabled(true)
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.Id).DataField("id")
+            .Width(250)
+            .AllowEditing(false)
+            .Fixed(true);
+        columns.AddFor(m => m.CustomerID).DataField("customerID").Caption(@L["utim_grid_CustomerAbbr"])
+            .Lookup(lookup => lookup
+                .DataSource(d => d.RemoteController().LoadUrl("/api/customer-service/customer/basic-list").Key("customerID"))
+                .DisplayExpr("customerAbbr")
+                .ValueExpr("customerID")
+            )
+            .EditCellTemplate(new TemplateName("CustomerDropDownBoxTemplate"))
+            .CssClass("editable-column-highlighted"); ;
+        columns.AddFor(m => m.CustomerName).DataField("customerName").Caption(@L["utim_grid_CustomerName"])
+            .AllowEditing(false);
+        columns.AddFor(m => m.TransType).DataField("transType").Caption(@L["utim_grid_TransType"])
+            .Lookup(lookup => lookup
+                .DataSource(transTypeList)
+                .DisplayExpr("value")
+                .ValueExpr("id")
+            )
+            .Width(80)
+            .CssClass("editable-column-highlighted");
+        columns.AddFor(m => m.Type).DataField("type").Caption(@L["utim_grid_Type"])
+            .Lookup(lookup => lookup
+                .DataSource(utiTypeList)
+                .DisplayExpr("value")
+                .ValueExpr("id")
+            )
+            .Width(80)
+            .CssClass("editable-column-highlighted");
+    })
+    .OnSaving("onSaving")
+)
+<div class="action-buttons" id="btn_actions">
+    <div class="row justify-content-between">
+        <div class="col-20">
+            <div class="row">
+                <div class="col-20">
+                    @(Html.DevExtreme().Button()
+                        .Text(L["utim_bottom_btn_Approve"])
+                        .ID("btnApprove")
+                        .Width(150).Height(50)
+                        .OnInitialized("setApproveButtonCss")
+                        .OnClick("onButtonAction")
+                        .Disabled(isDisableArppove)
+                        .Icon("check")
+                        .Type(ButtonType.Success)
+                        .Visible(false)
+                        )
+                    @(Html.DevExtreme().Button()
+                        .Text(L["utim_bottom_btn_CancelApproval"])
+                        .ID("btnCancelApproval")
+                        .Width(160).Height(50)
+                        .OnInitialized("setCancelApprovalButtonCss")
+                        .OnClick("onButtonAction")
+                        .Disabled(isDisableCancelApproval)
+                        .Type(ButtonType.Default)
+                        .Icon("clearsquare")
+                        .Visible(false)
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@await Html.PartialAsync("~/Pages/Components/Common/Template/Customer.cshtml")
+<script>
+    function getDataGridInstance() {
+        return $("#grdUTIMaintenanceByCtParty").dxDataGrid("instance");
+    }
+
+    function onSearch() {
+        onRefresh();
+        $("#grdUTIMaintenanceByCtParty").dxDataGrid("getDataSource").reload();
+    }
+
+    function onClear() {
+        $('#searchForm').dxForm('instance').resetValues();
+    }
+
+    function onRefresh() {
+        let dataGrid = getDataGridInstance();
+        dataGrid.clearSelection();
+        dataGrid.cancelEditData();
+        dataGrid.refresh();
+    }
+
+    function setApproveButtonCss(e) {
+        setButtonLeftBottomCss(e);
+    }
+
+    function setCancelApprovalButtonCss(e) {
+        setButtonRightBottomCss(e);
+    }
+
+    function getSearchFormValue() {
+        let form = $("#searchForm").dxForm("instance");
+        if (form.option("formData")) {
+            return JSON.stringify(form.option("formData"));
+        } else {
+            return { "type": "0" };
+        }
+    }
+
+    function onExporting(e) {
+        let now = new Date();
+        let nowFormat = now.getUTCFullYear() + ("0" + (now.getUTCMonth() + 1)).slice(-2) + ("0" + now.getUTCDate()).slice(-2);
+        let workbook = new ExcelJS.Workbook();
+        let worksheet = workbook.addWorksheet('UTI Maintainance');
+
+        DevExpress.excelExporter.exportDataGrid({
+            component: e.component,
+            worksheet: worksheet,
+            autoFilterEnabled: true
+        }).then(function () {
+            workbook.xlsx.writeBuffer().then(function (buffer) {
+                saveAs(new Blob([buffer], { type: 'application/octet-stream' }), ('UTIMaintainance' + nowFormat + '.xlsx'));
+            });
+        });
+        e.cancel = true;
+    }
+
+    function onSaving(e) {
+        e.cancel = true;
+
+        if (e.changes.length) {
+            sample.test1Service.uTIMaintenanceByCtParties.uTIMaintenanceByCtParty
+                .saveAction(e.changes, {
+                    type: 'POST'
+                }).done(() => {
+                    e.component.refresh(true).done(() => {
+                        e.component.cancelEditData();
+                        e.component.refresh();
+                    });
+                });
+        }
+    }
+
+    function onButtonAction(e) {
+        e.cancel = true;
+
+        let gridSelectedRowsData = getDataGridInstance().getSelectedRowsData();
+        if (gridSelectedRowsData == null || gridSelectedRowsData.length == 0) {
+            abp.message.warn(@Json.Serialize(@L["common_msg_I0001"].Value));
+            return;
+        }
+
+        let items = [];
+        gridSelectedRowsData.forEach((rowData, index, data) => {
+            let item = new Object();
+            item.key = rowData.id;
+            items.push(item);
+
+            if (index == (data.length - 1)) {
+                let actionBtn = e.element.attr("ID");
+                if (actionBtn == 'btnApprove') {
+                    sample.test1Service.uTIMaintenanceByCtParties.uTIMaintenanceByCtParty
+                        .approveAction(items, {
+                            type: 'POST'
+                        }).done((result) => {
+                            showMessageDialog(result, onRefresh);
+                        }).catch(function (error) {
+                            abp.message.error(@Json.Serialize(@L["common_msg_Exeption"].Value));
+                        });
+                } else if (actionBtn == 'btnCancelApproval') {
+                    sample.test1Service.uTIMaintenanceByCtParties.uTIMaintenanceByCtParty
+                        .cancelApprovalAction(items, {
+                            type: 'POST'
+                        }).done((result) => {
+                            showMessageDialog(result, onRefresh);
+                        }).catch(function (error) {
+                            abp.message.error(@Json.Serialize(@L["common_msg_Exeption"].Value));
+                        });
+                }
+            }
+        });
+    }
+
+    function onChangedCustomerAbbr(data) {
+        //if (data.previousValue != null) {
+        //    $("#slb-ODAccNo1").dxSelectBox('instance').option('value', null);
+        //}
+        let selected = $('#sb_customer').dxSelectBox('instance').option('selectedItem');
+        //if (selected) {
+            $("#txt_CustomerName").dxTextBox({ value: selected ? selected.customerName : null });
+            //var slbODAccNo = $("#slb-ODAccNo1").dxSelectBox("instance");
+            //slbODAccNo.option("dataSource", getAccountsByCusID(data));
+        //}
+    }
+
+    function onStatusChanged(e) {       
+        if (e.component.NAME === "dxRadioGroup") {
+            if (e.value == statusItemList[1]){
+                // Pending Approval
+                setVisibleItem(true, false);
+            } else if (e.value == statusItemList[2]){
+                // Approved
+                setVisibleItem(false, true);
+            } else {
+                // All
+                setVisibleItem(false, false);
+            }
+        }
+        onRefresh();
+    }
+    
+    var canEdit = @Json.Serialize(canEdit);
+    var canCreate = @Json.Serialize(canCreate);
+    var canDelete = @Json.Serialize(canDelete);
+    var canApprove = @Json.Serialize(canArppove);
+    var canCancelApproval = @Json.Serialize(canCancelApproval);
+    function setVisibleItem(btnApprove, btnCancelApproval) {
+        if(btnApprove != null){
+            $("#btnApprove").dxButton("instance").option("visible", canApprove && btnApprove);
+        }
+        if(btnCancelApproval != null){
+            $("#btnCancelApproval").dxButton("instance").option("visible", canCancelApproval && btnCancelApproval);
+        }
+    }
+
+    function onVisibleEditButton(e) {
+        let status = $("#radio_StatusFilter").dxRadioGroup("instance").option("value");
+        let isVisible = (status == null && canEdit && canCreate && canDelete);
+        return isVisible;
+    }
+
+    function filterDatesValidation(e) {
+        let fromDateValue = $("#dbx_from").dxDateBox("instance").option('value');
+        if (e.value < fromDateValue) {
+            abp.message.warn(@Json.Serialize(@L["common_msg_E0001"].Value), "Warning");
+        }
+    }
+
+    function setButtonDefaultCss(e) {
+        e.element.addClass("btn-box-shadow");
+    }
+
+    function setButtonLeftBottomCss(e) {
+        e.element.addClass("btn-left-bottom");
+        e.element.addClass("btn-box-shadow");
+    }
+
+    function setButtonRightBottomCss(e) {
+        e.element.addClass("btn-right-bottom");
+        e.element.addClass("btn-box-shadow");
+    }
+
+    function showMessageDialog(result, callback) {
+        if (result) {
+            if (result.status == 0) {
+                abp.message.success(result.message, "Success").then(function () { callback(); });
+            } else if (result.status == 1) {
+                abp.message.warn(result.message, "Warning").then(function () { callback(); });
+            } else {
+                abp.message.error(result.message, "Error").then(function () { callback(); });
+            }
+        }
+    }
+
+    function onCustomerSelectionChanged(selectionChangedArgs, component) {
+        let setValue = component.option('setValue');
+        let customerID = selectionChangedArgs.selectedRowKeys[0];
+
+        component.option('value', customerID);
+        setValue(customerID);
+        if (selectionChangedArgs.selectedRowKeys.length > 0) {
+            component.close();
+        }
+    }
+</script>
+<style>
+    .btn-box-shadow {
+        box-shadow: 2px 2px 1px #727272;
+    }
+
+    .btn-box-shadow:hover, .btn-box-shadow:focus {
+        box-shadow: 2px 2px 1px #2e2e2e;
+    }
+
+    .btn-left-bottom {
+        float: left;
+        margin: 0 8px 0 0;
+    }
+
+    .btn-right-bottom {
+        float: right;
+        margin: 0 0 0 8px;
+    }
+
+    .dx-header-row .editable-column-highlighted {
+        background-color: #ffcf00;
+    }
+
+    td.dx-command-edit {
+        min-width: 50px !important;
+    }
+</style>

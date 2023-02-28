@@ -1,0 +1,42 @@
+name: sample
+services:
+- name: auth-server
+  project: apps/Sample.AuthServer/Sample.AuthServer.csproj
+  bindings:
+    - protocol: http
+      port: 7000
+- name: gateway
+  project: gateway/Sample.Gateway/Sample.Gateway.csproj
+  bindings:
+    - protocol: http
+      port: 7500
+- name: administration-service
+  project: services/administration/host/Sample.AdministrationService.HttpApi.Host/Sample.AdministrationService.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 7001
+- name: identity-service
+  project: services/identity/host/Sample.IdentityService.HttpApi.Host/Sample.IdentityService.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 7002
+- name: saas-service
+  project: services/saas/host/Sample.SaaSService.HttpApi.Host/Sample.SaaSService.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 7003
+- name: test1-service
+  project: services/test1/host/Sample.Test1Service.HttpApi.Host/Sample.Test1Service.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 7005
+- name: customer-service
+  project: services/customer/host/Sample.CustomerService.HttpApi.Host/Sample.CustomerService.HttpApi.Host.csproj
+  bindings:
+    - protocol: http
+      port: 7006
+- name: web
+  project: apps/Sample.Web/Sample.Web.csproj
+  bindings:
+    - protocol: http
+      port: 7004

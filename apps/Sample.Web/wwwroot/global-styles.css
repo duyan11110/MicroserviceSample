@@ -1,0 +1,70 @@
+/* Your Global Styles */
+
+:root .lpx-brand-logo {
+    --lpx-logo: url('/images/logo/leptonx/logo-light.png');
+    --lpx-logo-icon: url('/images/logo/leptonx/logo-light-thumbnail.png');
+}
+
+/* Your Global Styles */
+body {
+    background-color: #eff3f1;
+}
+
+.dx-freespace-row td {
+    border-color: transparent !important
+}
+
+.dx-datagrid .dx-row-alt > td, .dx-datagrid .dx-row-alt > tr > td {
+    background-color: lightcyan;
+}
+
+.dx-treelist .dx-row-alt > td, .dx-treelist .dx-row-alt > tr > td {
+    background-color: lightcyan;
+}
+
+.dx-datagrid-summary-item {
+    overflow: visible;
+}
+
+.dx-datagrid-nowrap .dx-header-row > td > .dx-datagrid-text-content {
+    white-space: normal;
+}
+
+/*.dx-datagrid-rowsview .dx-scrollable-content {
+    padding-bottom: 5px;
+}*/
+
+.dx-datagrid-pager .dx-info {
+    font-weight: bold;
+    opacity: 1 !important;
+}
+
+.blink-bg {
+    color: #fff;
+    /*padding: 10px;*/
+    /*display: inline-block;*/
+    /*border-radius: 5px;*/
+    animation: blinkingBackground 2s infinite;
+}
+
+@keyframes blinkingBackground {
+    0% {
+        background-color: #10c018;
+    }
+
+    25% {
+        background-color: #1056c0;
+    }
+
+    50% {
+        background-color: #ef0a1a;
+    }
+
+    75% {
+        background-color: #254878;
+    }
+
+    100% {
+        background-color: #04a1d5;
+    }
+}

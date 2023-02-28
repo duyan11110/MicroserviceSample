@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Sample.IdentityService</RootNamespace>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <UserSecretsId>Sample.IdentityService-c2d31439-b723-48e2-b061-5ebd7aeb6010</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\shared\Sample.Shared.Hosting.Microservices\Sample.Shared.Hosting.Microservices.csproj" />
+    <ProjectReference Include="..\..\..\administration\src\Sample.AdministrationService.EntityFrameworkCore\Sample.AdministrationService.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\saas\src\Sample.SaaSService.EntityFrameworkCore\Sample.SaaSService.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\src\Sample.IdentityService.HttpApi\Sample.IdentityService.HttpApi.csproj" />
+    <ProjectReference Include="..\..\src\Sample.IdentityService.Application\Sample.IdentityService.Application.csproj" />
+    <ProjectReference Include="..\..\src\Sample.IdentityService.EntityFrameworkCore\Sample.IdentityService.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Logs\**" />
+    <Content Remove="Logs\**" />
+    <EmbeddedResource Remove="Logs\**" />
+    <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="ConfigureAwait.Fody" Version="3.3.2" />
+    <PackageReference Update="Fody" Version="6.6.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

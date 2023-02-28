@@ -1,0 +1,48 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using Microsoft.Extensions.Localization
+@using Sample.Test1Service.Localization
+@inject IStringLocalizer<Test1ServiceResource> L
+
+@using (Html.DevExtreme().NamedTemplate("CustomerDropDownBoxTemplate"))
+{
+    @(Html.DevExtreme().DropDownBox()
+                .DataSource(d => d.RemoteController().LoadUrl("/api/customer-service/customer/basic-list").Key("customerID"))
+            .Value(new JS("value"))
+            .ValueExpr("customerID")
+            .DisplayExpr("customerAbbr")
+            .DropDownOptions(options => options.Width(1000))
+            .Option("setValue", new JS("setValue"))
+            .ContentTemplate(new TemplateName("CustomerContentTemplate"))
+            @*Disabled(new JS("row.isNewRow !== true && row.data.approvedDate !== null"))*@
+            .Disabled(new JS("row.isNewRow == true"))
+        )
+}
+
+@using (Html.DevExtreme().NamedTemplate("CustomerContentTemplate"))
+{
+    @(Html.DevExtreme().DataGrid()
+                .ID("grdCusContent").DataSource(d => d.RemoteController().LoadUrl("/api/customer-service/customer/basic-list").Key("customerID"))
+            .RemoteOperations(true)
+            .ColumnAutoWidth(true)
+            .ShowBorders(true)
+            .ShowRowLines(true)
+            .Scrolling(s => s.Mode(GridScrollingMode.Infinite))
+            .Paging(p => p.PageSize(50))
+            .Height(250)
+            .RowAlternationEnabled(true)
+            .Columns(c =>
+            {
+                c.Add().DataField("customerID").Caption(@L["cust_temp_grid_CustomerID"]);
+                c.Add().DataField("customerAbbr").Caption(@L["cust_temp_grid_CustomerAbbr"]);
+                c.Add().DataField("customerName").Caption(@L["cust_temp_grid_CustomerName"]);
+                c.Add().DataField("address").Caption(@L["cust_temp_grid_Address"]);
+            })
+            .HoverStateEnabled(true)
+            .RemoteOperations(true)
+            .Selection(s => s.Mode(SelectionMode.Single))
+            .SelectedRowKeys(new JS("[component.option('value')]"))
+            .FocusedRowEnabled(true)
+            .FocusedRowKey(new JS("component.option('value')"))
+            .OnSelectionChanged("function(selectionChangedArgs) { onCustomerSelectionChanged(selectionChangedArgs, component) }")
+        )
+}

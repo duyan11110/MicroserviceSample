@@ -1,0 +1,64 @@
+{
+  "culture": "en",
+  "texts": {
+    "MyAccount": "My account",
+    "SamplePageMessage": "A sample page for the Test1Service module",
+
+    // Permission
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:Approve": "Approve",
+    "Permission:CancelApproval": "Cancel After Approval",
+    "Permission:Upload": "Upload",
+    "Permission:Send": "Send",
+    "Permission:Download": "Download",
+    "Permission:UTIMaintenanceByCtParty": "UTI Maintenance By Ct Parties",
+    "Permission:GeneralParameters": "General Parameters",
+    "Permission:SystemParameters": "System Parameters",
+    "Permission:BusinessKinds": "Business Kinds",
+    "Permission:Statuses": "Statuses",
+    "Permission:StatusFlows": "Status Flows",
+    "Permission:UserActions": "User Actions",
+    "Permission:ManualUploadFiles": "Manual Upload Files",
+
+    // Common
+    "common_msg_Exeption": "An error occurred. Please try again later!",
+    "common_msg_I0001": "No records has selected",
+    "common_msg_E0001": "From date must be greater than To date",
+
+    // UTI Maintainance by CounterParty
+    "utim_form_InputDateForm": "Input Date Form",
+    "utim_form_InputDateTo": "To",
+    "utim_form_RefNo": "Ref No",
+    "utim_form_TransType": "Trans Type",
+    "utim_form_Type": "Generate UTI (Y/N)",
+    "utim_form_Status": "Status",
+    "utim_form_CustomerAbbr": "Customer Abbr",
+    "utim_form_CustomerName": "Customer Name",
+    "utim_grid_CustomerAbbr": "Customer Abbr",
+    "utim_grid_CustomerName": "Customer Name",
+    "utim_grid_TransType": "TransType",
+    "utim_grid_Type": "Generate UTI (Y/N)",
+    "utim_grid_Status": "Status",
+    "utim_grid_InputDate": "Input Date",
+    "utim_grid_CreatedBy": "Created By",
+    "utim_grid_CreatedDate": "Created Date",
+    "utim_grid_ModifiedBy": "Modified By",
+    "utim_grid_ModifiedDate": "Modified Date",
+    "utim_grid_ApprovedBy": "Approved By",
+    "utim_grid_ApprovedDate": "Approved Date",
+    "utim_grid_CancelApprovedBy": "Cancel Approved By",
+    "utim_grid_CancelApprovedDate": "Cancel Approved Date",
+    "utim_bottom_btn_Approve": "Approve",
+    "utim_bottom_btn_CancelApproval": "Cancel After Approval",
+    "utim_msg_I0001": "Transaction was approved successfully.",
+    "utim_msg_I0002": "Transaction was cancel approval successfully.",
+
+    // Customer template
+    "cust_temp_grid_CustomerID": "ID",
+    "cust_temp_grid_CustomerAbbr": "Customer Abbr",
+    "cust_temp_grid_CustomerName": "Customer Name",
+    "cust_temp_grid_Address": "Address"
+  }
+}

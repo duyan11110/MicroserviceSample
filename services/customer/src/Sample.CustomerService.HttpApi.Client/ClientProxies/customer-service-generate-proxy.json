@@ -1,0 +1,201 @@
+{
+  "modules": {
+    "customer-service": {
+      "rootPath": "customer-service",
+      "remoteServiceName": "CustomerService",
+      "controllers": {
+        "Sample.CustomerService.Samples.SampleAppService": {
+          "controllerName": "Sample",
+          "controllerGroupName": "Sample",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Sample.CustomerService.Samples.SampleAppService",
+          "interfaces": [
+            {
+              "type": "Sample.CustomerService.Samples.ISampleAppService",
+              "name": "ISampleAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Sample.CustomerService.Samples.SampleDto",
+                    "typeSimple": "Sample.CustomerService.Samples.SampleDto"
+                  }
+                },
+                {
+                  "name": "GetAuthorizedAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "Sample.CustomerService.Samples.SampleDto",
+                    "typeSimple": "Sample.CustomerService.Samples.SampleDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetAsync": {
+              "uniqueName": "GetAsync",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/customer-service/sample",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Sample.CustomerService.Samples.SampleDto",
+                "typeSimple": "Sample.CustomerService.Samples.SampleDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Sample.CustomerService.Samples.ISampleAppService"
+            },
+            "GetAuthorizedAsync": {
+              "uniqueName": "GetAuthorizedAsync",
+              "name": "GetAuthorizedAsync",
+              "httpMethod": "GET",
+              "url": "api/customer-service/sample/authorized",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "Sample.CustomerService.Samples.SampleDto",
+                "typeSimple": "Sample.CustomerService.Samples.SampleDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Sample.CustomerService.Samples.ISampleAppService"
+            }
+          }
+        },
+        "Sample.CustomerService.Customers.CustomerAppService": {
+          "controllerName": "Customer",
+          "controllerGroupName": "Customer",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Sample.CustomerService.Customers.CustomerAppService",
+          "interfaces": [
+            {
+              "type": "Sample.CustomerService.Customers.ICustomerAppService",
+              "name": "ICustomerAppService",
+              "methods": [
+                {
+                  "name": "GetBasicListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "loadOptions",
+                      "typeAsString": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions, DevExtreme.AspNet.Core",
+                      "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                      "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "DevExtreme.AspNet.Data.ResponseModel.LoadResult",
+                    "typeSimple": "DevExtreme.AspNet.Data.ResponseModel.LoadResult"
+                  }
+                },
+                {
+                  "name": "GetByIdAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "customerID",
+                      "typeAsString": "System.Int32, System.Private.CoreLib",
+                      "type": "System.Int32",
+                      "typeSimple": "number",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Sample.CustomerService.Customers.BasicCustomerDto",
+                    "typeSimple": "Sample.CustomerService.Customers.BasicCustomerDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetBasicListAsyncByLoadOptions": {
+              "uniqueName": "GetBasicListAsyncByLoadOptions",
+              "name": "GetBasicListAsync",
+              "httpMethod": "GET",
+              "url": "api/customer-service/customer/basic-list",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "loadOptions",
+                  "typeAsString": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions, DevExtreme.AspNet.Core",
+                  "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "loadOptions",
+                  "name": "loadOptions",
+                  "jsonName": null,
+                  "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Custom",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "DevExtreme.AspNet.Data.ResponseModel.LoadResult",
+                "typeSimple": "DevExtreme.AspNet.Data.ResponseModel.LoadResult"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Sample.CustomerService.Customers.ICustomerAppService"
+            },
+            "GetByIdAsyncByCustomerID": {
+              "uniqueName": "GetByIdAsyncByCustomerID",
+              "name": "GetByIdAsync",
+              "httpMethod": "GET",
+              "url": "api/customer-service/customer/by-id",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "customerID",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "customerID",
+                  "name": "customerID",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "Sample.CustomerService.Customers.BasicCustomerDto",
+                "typeSimple": "Sample.CustomerService.Customers.BasicCustomerDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Sample.CustomerService.Customers.ICustomerAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}

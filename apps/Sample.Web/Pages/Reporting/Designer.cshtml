@@ -1,0 +1,25 @@
+﻿@page
+@using Sample.Web.Bundling.Reporting.DocumentDesigner
+@using DevExpress.AspNetCore
+@model Sample.Web.Pages.Reporting.Designer
+
+@{
+    var designerRender = Html.DevExpress().ReportDesigner("reportDesigner")
+        .Height("1000px")
+        //.Bind(Model.DesignerModel.Report)
+        .DataSources(configureDS =>
+        {
+            foreach (var ds in Model.DesignerModel.DataSources)
+            {
+                configureDS.Add(ds.Key, ds.Value);
+            }
+        });
+    @designerRender.RenderHtml()
+}
+
+@section Scripts {
+    <abp-style type="typeof(DevExpressDocumentDesignerStyleContributor)" />
+
+    <abp-script type="typeof(DevExpressDocumentDesignerScriptContributor)" />
+    @designerRender.RenderScripts()
+}

@@ -1,0 +1,12 @@
+﻿@page
+@using DevExtreme.AspNet.Mvc;
+@using Microsoft.Extensions.Localization
+@using Sample.Test1Service.Localization
+@using Sample.Test1Service.Web.Pages.Test1
+@model Sample.Test1Service.Web.Pages.Test1.IndexModel
+@inject IStringLocalizer<Test1ServiceResource> L
+
+@{
+    ViewBag.FluidLayout = true;
+}
+<h1>Test 1 service</h1>

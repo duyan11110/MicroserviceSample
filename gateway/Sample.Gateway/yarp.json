@@ -1,0 +1,125 @@
+{
+  "ReverseProxy": {
+    "Routes": {
+      "Account Service": {
+        "ClusterId": "account-cluster",
+        "Match": {
+          "Path": "/api/account/{**everything}"
+        }
+      },
+      "SaaS Service": {
+        "ClusterId": "saas-cluster",
+        "Match": {
+          "Path": "/api/multi-tenancy/{**everything}"
+        }
+      },
+      "Identity Service": {
+        "ClusterId": "identity-cluster",
+        "Match": {
+          "Path": "/api/identity/{**everything}"
+        }
+      },
+      "Administration Service": {
+        "ClusterId": "administration-cluster",
+        "Match": {
+          "Path": "/api/abp/{**everything}"
+        }
+      },
+      "feature-management-route": {
+        "ClusterId": "feature-management-cluster",
+        "Match": {
+          "Path": "/api/feature-management/{**everything}"
+        }
+      },
+      "permission-management-route": {
+        "ClusterId": "permission-management-cluster",
+        "Match": {
+          "Path": "/api/permission-management/{**everything}"
+        }
+      },
+      "setting-management-route": {
+        "ClusterId": "setting-management-cluster",
+        "Match": {
+          "Path": "/api/setting-management/{**everything}"
+        }
+      },
+      "Test1 Service": {
+        "ClusterId": "test1-cluster",
+        "Match": {
+          "Path": "/api/test1-service/{**everything}"
+        }
+      },
+      "Customer Service": {
+        "ClusterId": "customer-cluster",
+        "Match": {
+          "Path": "/api/customer-service/{**everything}"
+        }
+      }
+    },
+    "Clusters": {
+      "account-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7002"
+          }
+        }
+      },
+      "saas-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7003"
+          }
+        }
+      },
+      "identity-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7002"
+          }
+        }
+      },
+      "administration-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7001"
+          }
+        }
+      },
+      "feature-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7001"
+          }
+        }
+      },
+      "permission-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7001"
+          }
+        }
+      },
+      "setting-management-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7001"
+          }
+        }
+      },
+      "test1-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7005"
+          }
+        }
+      },
+      "customer-cluster": {
+        "Destinations": {
+          "destination1": {
+            "Address": "http://localhost:7006"
+          }
+        }
+      }
+    }
+  }
+}

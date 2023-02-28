@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>Sample.Test1Service</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Samples\**" />
+    <Compile Remove="Statuses\**" />
+    <Compile Remove="UTIControlByTrans\**" />
+    <Compile Remove="UTIMaintenanceByCtParties\**" />
+    <EmbeddedResource Remove="Samples\**" />
+    <EmbeddedResource Remove="Statuses\**" />
+    <EmbeddedResource Remove="UTIControlByTrans\**" />
+    <EmbeddedResource Remove="UTIMaintenanceByCtParties\**" />
+    <None Remove="Samples\**" />
+    <None Remove="Statuses\**" />
+    <None Remove="UTIControlByTrans\**" />
+    <None Remove="UTIMaintenanceByCtParties\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="7.0.1" />
+    <ProjectReference Include="..\Sample.Test1Service.Application.Contracts\Sample.Test1Service.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

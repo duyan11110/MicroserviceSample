@@ -1,0 +1,111 @@
+{
+  "modules": {
+    "test1-service": {
+      "rootPath": "test1-service",
+      "remoteServiceName": "Test1Service",
+      "controllers": {
+        "Sample.Test1Service.UTIMaintenanceByCtParties.UTIMaintenanceByCtPartyAppService": {
+          "controllerName": "UTIMaintenanceByCtParty",
+          "controllerGroupName": "UTIMaintenanceByCtParty",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "Sample.Test1Service.UTIMaintenanceByCtParties.UTIMaintenanceByCtPartyAppService",
+          "interfaces": [
+            {
+              "type": "Sample.Test1Service.UTIMaintenanceByCtParties.IUTIMaintenanceByCtPartyAppService",
+              "name": "IUTIMaintenanceByCtPartyAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "value",
+                      "typeAsString": "System.String, System.Private.CoreLib",
+                      "type": "System.String",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "loadOptions",
+                      "typeAsString": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions, DevExtreme.AspNet.Core",
+                      "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                      "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "DevExtreme.AspNet.Data.ResponseModel.LoadResult",
+                    "typeSimple": "DevExtreme.AspNet.Data.ResponseModel.LoadResult"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListAsyncByValueAndLoadOptions": {
+              "uniqueName": "GetListAsyncByValueAndLoadOptions",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/test1-service/u-tIMaintenance-by-ct-party",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "value",
+                  "typeAsString": "System.String, System.Private.CoreLib",
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "loadOptions",
+                  "typeAsString": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions, DevExtreme.AspNet.Core",
+                  "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "value",
+                  "name": "value",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "loadOptions",
+                  "name": "loadOptions",
+                  "jsonName": null,
+                  "type": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "typeSimple": "DevExtreme.AspNet.Mvc.DataSourceLoadOptions",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Custom",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "DevExtreme.AspNet.Data.ResponseModel.LoadResult",
+                "typeSimple": "DevExtreme.AspNet.Data.ResponseModel.LoadResult"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Sample.Test1Service.UTIMaintenanceByCtParties.IUTIMaintenanceByCtPartyAppService"
+            }
+          }
+        }
+      }
+    }
+  },
+  "types": {}
+}
